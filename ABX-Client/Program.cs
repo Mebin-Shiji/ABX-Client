@@ -16,7 +16,10 @@ List<Packet> packets = [];
 
 try
 {
-    CancellationToken cancellationToken = new();
+    // Creating a cancellation token with a timeout.
+    var cts = new CancellationTokenSource();
+    cts.CancelAfter(TimeSpan.FromMilliseconds(READ_TIMEOUT_MS));
+    CancellationToken cancellationToken = cts.Token;
 
     await GetAllPacketsAsync(cancellationToken);
     
@@ -97,7 +100,6 @@ async Task GetAllPacketsAsync(CancellationToken cancellationToken)
 // Gets the missing packet based on sequence number.
 async Task GetMissingPacketsAsync(CancellationToken cancellationToken, int sequenceNumber)
 {
-
     await RetryAsync(async () =>
     {
         Console.WriteLine("Connecting to server...");
@@ -123,15 +125,12 @@ async Task GetMissingPacketsAsync(CancellationToken cancellationToken, int seque
 async Task ReceivePacketsAsync(NetworkStream stream, CancellationToken cancellationToken, bool expectSinglePacket = false)
 {
     var buffer = new byte[PACKET_SIZE];
-    // Set a read timeout.
-    using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-    timeoutCts.CancelAfter(READ_TIMEOUT_MS);
 
     try
     {
         while (true)
         {
-            int bytesRead = await stream.ReadAsync(buffer, timeoutCts.Token);
+            int bytesRead = await stream.ReadAsync(buffer, cancellationToken);
             if (bytesRead == 0)
                 break;
 
