@@ -1,11 +1,7 @@
 ## OverView
 
-This is a project for Zicuro Technologies. 
-I didn't have much time so I didn't optimize the TCP connection, exception handling best practices that much.
-
 To run this console app you need to install .NET 9. 
 .NET 8 is also supported but you'll need to change the target framework version in ABX-Client.csproj file to net8.0.
-If you have any trouble with it, feel free to contact me.
 
 ## Steps to run the application
 
@@ -15,8 +11,7 @@ If you have any trouble with it, feel free to contact me.
 4. Run the node server.
 5. If you have visual studio, just open the .sln file and run the .NET app from there. Otherwise
 6. Open terminal on the path ..\ABX-Client\ABX-Client
-7. Run command 'dotnet build'
-8. Run command 'dotnet run'
+7. Run command 'dotnet run'
 
 
 The final json will be printed in the console and also at the location ..\ABX-Client\ABX-Client\bin\Debug\net9.0\result.json
